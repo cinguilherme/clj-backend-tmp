@@ -37,10 +37,12 @@
    :db-crux (CruxDb/new-db)
    :cache (MemoryCache/new-cache)
    :cli (Cli/new-cli)
-   :server (Server/new-pedestal app-server/service-map)))
+   :server (component/using
+            (Server/new-pedestal app-server/service-map)
+            {:db :db-crux
+             :cache :cache})))
 
 (set-init (fn [_] (dev-system)))
-
 
 (comment
 

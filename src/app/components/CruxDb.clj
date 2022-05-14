@@ -2,15 +2,21 @@
   (:require [com.stuartsierra.component :as component]
             [crux.api :as crux]))
 
-(defrecord CruxDbComponent [_]
+(defrecord CruxDbComponent [node-config]
   component/Lifecycle
 
   (start [this]
-    (let [node (crux/start-node {})]
-      (assoc this :db-node node)))
+    (let [node (:db-node this)]
+      (if node
+        this
+        (let [new-node (crux/start-node node-config)]
+          (assoc this :db-node new-node)))))
 
   (stop [this]
-        (dissoc this :db-node)))
+    (let [node (:db-node this)]
+      (if node
+        (assoc this :db-node nil)
+        this))))
 
 (defn new-db []
-  (map->CruxDbComponent {}))
+  (map->CruxDbComponent {:node-condig {}}))
