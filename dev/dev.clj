@@ -24,10 +24,26 @@
    [app.components.CruxDb :as CruxDb]
    [app.components.MemoryCache :as MemoryCache]
    [app.components.Cli :as Cli]
-   [app.components.Server :as Server]))
+   [app.components.Server :as Server]
+   [io.pedestal.http :as http]
+   [io.pedestal.http.route :as route]))
 
 ;; Do not try to load source code from 'resources' directory
 (clojure.tools.namespace.repl/set-refresh-dirs "dev" "src" "test")
+
+
+(defn get-todo [_]
+  {:status 200 :body {:well 101}})
+
+(def routes
+  (route/expand-routes
+   #{["/todo" :get get-todo :route-name :list-todo]}))
+
+(def service-map
+  {::http/routes routes
+   ::http/type :jetty
+   ::http/port 8081
+   ::http/join? false})
 
 (defn dev-system
   "Constructs a system map suitable for interactive development."
@@ -36,7 +52,7 @@
    :db-crux (CruxDb/new-db)
    :cache (MemoryCache/new-cache)
    :cli (Cli/new-cli)
-   :server (Server/new-pedestal 8081)))
+   :server (Server/new-pedestal service-map)))
 
 (set-init (fn [_] (dev-system)))
 
