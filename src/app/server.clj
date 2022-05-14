@@ -9,13 +9,19 @@
 (defn get-rollouts [_]
   {:status 200 :body [{:name "x" :desc "x is cool" :active? false}]})
 
+(defn get-stuff [_]
+  {:status 200 :body [{:name "x" :desc "XXX is cool" :active? false}]})
+
 (def routes
   (route/expand-routes
     #{["/todo" :get get-todo :route-name :list-todo]
-      ["/rollouts" :get get-rollouts :route-name :list-rollouts]}))
+      ["/rollouts" :get get-rollouts :route-name :list-rollouts]
+      ["/stuff" :get get-stuff :route-name :list-stuff]
+      ["/stuffx" :get get-stuff :route-name :list-stuffs]}))
 
 (def service-map
-  {::http/routes routes
+  {:env          :dev
+   ::http/routes routes
    ::http/type   :jetty
    ::http/port   8081
    ::http/join?  false})

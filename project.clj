@@ -3,9 +3,9 @@
   :url "TODO"
   :license {:name "TODO: Choose a license"
             :url "http://choosealicense.com/"}
-  :dependencies [[org.clojure/clojure "1.11.0"]
+  :dependencies [[org.clojure/clojure "1.11.1"]
                  [com.stuartsierra/component "1.1.0"]
-                 [pro.juxt.crux/crux-core "1.17.1"]
+                 [pro.juxt.crux/crux-core "1.18.1"]
                  [org.clojure/core.async "1.5.648"]
                  [io.pedestal/pedestal.service       "0.5.10"]
                  [io.pedestal/pedestal.route         "0.5.10"]

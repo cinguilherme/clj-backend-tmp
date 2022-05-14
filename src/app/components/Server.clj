@@ -1,7 +1,7 @@
 (ns app.components.Server
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.http :as http]
-            [app.utils :as utils :refer [not-nil? tap]]))
+            [app.utils :refer [not-nil? tap]]))
 
 (defn test?
   [service-map]
@@ -14,44 +14,26 @@
   service)
 
 (defn stop-service! []
-  (http/stop @service-instance)
+  (println "stopping current service")
+  (some-> @service-instance http/stop println)
   (reset! service-instance nil))
 
-(defrecord Pedestal [service-map]
+(defrecord Pedestal [db cache service-map service]
   component/Lifecycle
 
   (start [this]
-    (let [_ (tap @service-instance)
-          _ (tap this)
-          service (tap (:service this))]
-      (cond
-
-        (not-nil? service)
-        this
-
-        :else
-        (do
-            (when (not-nil? @service-instance)
-              (println "stoping http service")
-              (stop-service!))
-            (println "starting http service")
-            (cond-> service-map
-                    true http/create-server
-                    (not (test? service-map)) http/start
-                    true set-service!
-                    true (partial assoc this :service))))))
+    (if service
+      this
+      (cond-> service-map
+              true http/create-server
+              (not (test? service-map)) http/start
+              true ((partial assoc this :service)))))
 
   (stop [this]
-    (let [_ (tap @service-instance)
-          _ (tap this)
-          service (tap (:service this))]
-      (println "stoping http service")
-      (if (not-nil? service)
-        (do (stop-service!)
-            (http/stop service)
-            (assoc this :service nil))
-        this))))
+    (when (and service (not (test? service-map)))
+      (http/stop service))
+    (assoc this :service nil)))
 
 
-(defn new-pedestal [service-map]
-  (map->Pedestal {:service-map service-map}))
+(defn new-pedestal []
+  (map->Pedestal {}))
