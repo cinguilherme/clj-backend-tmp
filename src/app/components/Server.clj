@@ -1,33 +1,31 @@
 (ns app.components.Server
   (:require [com.stuartsierra.component :as component]
             [io.pedestal.http :as http]
-            [app.utils :refer [not-nil? tap]]))
+            [app.server :as server]))
 
 (defn test?
   [service-map]
   (= :test (:env service-map)))
 
-(defonce service-instance (atom nil))
+(defn make-components [components]
+  {:name ::components
+   :enter (fn [context]
+            (update context :request assoc ::components components))})
 
-(defn set-service! [service]
-  (reset! service-instance service)
-  service)
-
-(defn stop-service! []
-  (println "stopping current service")
-  (some-> @service-instance http/stop println)
-  (reset! service-instance nil))
-
-(defrecord Pedestal [db cache service-map service]
+(defrecord Pedestal [db-crux cache service-map service]
   component/Lifecycle
 
   (start [this]
     (if service
       this
-      (cond-> service-map
-              true http/create-server
-              (not (test? service-map)) http/start
-              true ((partial assoc this :service)))))
+      (let [routes (-> {:db db-crux :cache cache}
+                       make-components
+                       server/make-routes)]
+
+        (cond-> (assoc service-map ::http/routes routes)
+                true http/create-server
+                (not (test? service-map)) http/start
+                true ((partial assoc this :service))))))
 
   (stop [this]
     (when (and service (not (test? service-map)))
