@@ -1,8 +1,12 @@
 (ns app.server
   (:require [io.pedestal.http.route :as route]
             [io.pedestal.http :as http]
-            [io.pedestal.http.body-params :as body-params]))
+            [io.pedestal.http.body-params :as body-params]
+            [app.controllers.rollout :as controllers.rollout]
+            [app.adapters.rollout :as adapters.rollout]))
 
+(defn with-components [request]
+  (:app.components.Server/components request))
 
 (defn get-todo [_]
   {:status 200 :body {:well 101}})
@@ -16,12 +20,19 @@
                       {:request request}]})
 
 (defn new-rollout
-  [{:keys [components edn-params] :as request}]
-  (println request)
-  (println edn-params)
-  (let [id (random-uuid)]
-    {:status 201 :body {:created :ok :rollout (assoc edn-params :id id)}})
+  [{:keys [edn-params] :as request}]
+  (let [components (with-components request)]
+    (let [rollout-wire-out (-> edn-params
+                               adapters.rollout/wire-in->model
+                               (controllers.rollout/new-rollout! components)
+                               adapters.rollout/model->wire)]
+      {:status 201 :body rollout-wire-out}))
   )
+
+(defn get-rollout [request]
+  (let [components (with-components request)
+        rollouts (controllers.rollout/get-rollouts! components)]
+    {:status 200 :body rollouts}))
 
 (defn make-routes [component-interceptor]
   (route/expand-routes
@@ -31,6 +42,7 @@
       ["/stuffx" :get [component-interceptor get-stuff] :route-name :list-stuffs]
 
       ["/rollout" :post [component-interceptor (body-params/body-params) new-rollout] :route-name :new-rollout]
+      ["/rollout" :get [component-interceptor (body-params/body-params) get-rollout] :route-name :get-rollout]
       }))
 
 (def service-map

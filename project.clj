@@ -7,6 +7,7 @@
                  [com.stuartsierra/component "1.1.0"]
                  [pro.juxt.crux/crux-core "1.18.1"]
                  [org.clojure/core.async "1.5.648"]
+                 [prismatic/schema "1.2.1"]
                  [io.pedestal/pedestal.service       "0.5.10"]
                  [io.pedestal/pedestal.route         "0.5.10"]
                  [io.pedestal/pedestal.interceptor   "0.5.10"]
