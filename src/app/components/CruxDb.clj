@@ -2,7 +2,7 @@
   (:require [com.stuartsierra.component :as component]
             [crux.api :as crux]))
 
-(defrecord CruxDbComponent [node-config]
+(defrecord CruxDbComponent [config node-config]
   component/Lifecycle
 
   (start [this]

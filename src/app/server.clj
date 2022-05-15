@@ -13,22 +13,6 @@
   (println request)
   {:status 200 :body [{:name "x" :desc "XXX is cool" :active? false}
                       {:request request}]})
-(def db-interceptor
-  {:name ::db-interceptor
-   :enter (fn [context]
-            (update context :request assoc ::database (atom {})))})
-
-(def add-components
-  {:name ::components
-   :enter (fn [context]
-            (update context :request assoc ::components {:db {} :cache {} :config {}}))})
-
-(def routes
-  (route/expand-routes
-    #{["/todo" :get get-todo :route-name :list-todo]
-      ["/rollouts" :get get-rollouts :route-name :list-rollouts]
-      ["/stuff" :get get-stuff :route-name :list-stuff]
-      ["/stuffx" :get [db-interceptor add-components get-stuff] :route-name :list-stuffs]}))
 
 (defn make-routes [component-interceptor]
   (route/expand-routes
@@ -39,7 +23,7 @@
 
 (def service-map
   {:env          :dev
-   ::http/routes routes
+   ;::http/routes routes
    ::http/type   :jetty
    ::http/port   8081
    ::http/join?  false})

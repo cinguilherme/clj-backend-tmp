@@ -39,24 +39,31 @@
     :config
     (Config/new-config)
 
-    :service-map
-    app.server/service-map
-
-    :db-crux
-    (CruxDb/new-db)
+    :cli
+    (Cli/new-cli)
 
     :cache
     (MemoryCache/new-cache)
 
-    :cli
-    (Cli/new-cli)
+    :service-map
+    app.server/service-map
+
+    :routes-maker
+    app.server/make-routes
+
+    :db-crux
+    (component/using
+      (CruxDb/new-db)
+      {:config :config})
 
     :server
     (component/using
       (Server/new-pedestal)
-      {:service-map :service-map
-       :db-crux :db-crux
-       :cache :cache})))
+      {:service-map  :service-map
+       :routes-maker :routes-maker
+       :db-crux      :db-crux
+       :cache        :cache
+       :config       :config})))
 
 (set-init (fn [_] (dev-system)))
 
