@@ -37,7 +37,7 @@
   (component/system-map
 
     :config
-    (Config/new-config)
+    (Config/new-config "dev")
 
     :cli
     (Cli/new-cli)
