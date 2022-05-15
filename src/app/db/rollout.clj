@@ -7,7 +7,6 @@
 (s/defn insert!
   [rollout :- models.rollout/Rollout
    node]
-  (println "insert!")
   (let [tx (crux/submit-tx node [[:crux.tx/put rollout]])
         _ (println tx)]
     rollout))
@@ -16,5 +15,6 @@
   [node]
   (crux/q
     (crux/db node)
-    '{:find [(pull ?t1 [*])]
-      :where [[?t1 :crux.db/id ?some-id]]}))
+    '{:find  [(pull ?t1 [*])]
+      :where [[?t1 :crux.db/id ?some-id]
+              [?t1 :rollout/id ?some-other-id]]}))

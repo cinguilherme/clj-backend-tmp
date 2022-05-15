@@ -3,7 +3,8 @@
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
             [app.controllers.rollout :as controllers.rollout]
-            [app.adapters.rollout :as adapters.rollout]))
+            [app.adapters.rollout :as adapters.rollout]
+            [app.utils :as utils]))
 
 (defn with-components [request]
   (:app.components.Server/components request))
@@ -15,7 +16,6 @@
   {:status 200 :body [{:name "x" :desc "x is cool" :active? false}]})
 
 (defn get-stuff [request]
-  (println request)
   {:status 200 :body [{:name "x" :desc "XXX is cool" :active? false}
                       {:request request}]})
 
@@ -31,8 +31,12 @@
 
 (defn get-rollout [request]
   (let [components (with-components request)
-        rollouts (controllers.rollout/get-rollouts! components)]
-    {:status 200 :body rollouts}))
+        into->wire (partial map adapters.rollout/model->wire)
+        rollouts (-> components
+                     controllers.rollout/get-rollouts!
+                     into->wire
+                     vec)]
+    {:status 200 :body {:rollouts rollouts}}))
 
 (defn make-routes [component-interceptor]
   (route/expand-routes

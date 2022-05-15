@@ -3,7 +3,7 @@
 
 (s/defschema Rollout
              {:crux.db/id  s/Uuid
-              :id          s/Uuid
-              :name        s/Str
-              :description s/Str
-              :created-at  s/Str})
+              :rollout/id          s/Uuid
+              :rollout/name        s/Str
+              :rollout/description s/Str
+              :rollout/created-at  s/Str})

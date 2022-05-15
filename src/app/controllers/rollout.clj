@@ -1,7 +1,7 @@
 (ns app.controllers.rollout
   (:require [schema.core :as s]
             [app.db.rollout :as db.rollout]
-            [app.utils :as utils]))
+            [app.utils :as utils :refer [tap]]))
 
 (s/defn new-rollout!
   [rollout :- app.models.rollout/Rollout
@@ -12,4 +12,7 @@
     rollout))
 
 (defn get-rollouts! [{:keys [db] :as components}]
-  (db.rollout/get-all! (:db-node db)))
+  (->> (db.rollout/get-all! (:db-node db))
+       vec
+       flatten
+       vec))
