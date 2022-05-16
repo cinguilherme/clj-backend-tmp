@@ -16,3 +16,10 @@
        vec
        flatten
        vec))
+
+(defn get-rollouts-by-id! [id {:keys [db]}]
+  (->> (db.rollout/get-by-id! id (:db-node db))
+       vec
+       flatten
+       tap
+       vec))

@@ -71,10 +71,11 @@
 
   (start)
   (stop)
+
   ;(reset)
   ;(refresh dev-system)
 
-  (-> (dev-system) :server)
+  ;(-> (dev-system) :server)
 
 
   (let [{:keys [db-crux cache]} (dev-system)]

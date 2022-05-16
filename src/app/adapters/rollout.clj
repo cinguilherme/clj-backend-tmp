@@ -6,9 +6,9 @@
             [app.wire.out.rollout :as wire.out.rollout]))
 
 (s/defn wire-in->model :- models.rollout/Rollout
-  [{:keys [name desc]} :- wire.in.rollout/InNewRollout]
-  {:crux.db/id  (random-uuid)
-   :rollout/id          (random-uuid)
+  [{:keys [name desc id?]} :- wire.in.rollout/InNewRollout]
+  {:crux.db/id          (random-uuid)
+   :rollout/id          (if id? id? (random-uuid))
    :rollout/name        name
    :rollout/description desc
    :rollout/created-at  (utils/now)})

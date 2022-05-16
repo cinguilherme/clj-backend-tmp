@@ -4,7 +4,7 @@
             [io.pedestal.http.body-params :as body-params]
             [app.controllers.rollout :as controllers.rollout]
             [app.adapters.rollout :as adapters.rollout]
-            [app.utils :as utils]))
+            [app.utils :as utils :refer [tap]]))
 
 (defn with-components [request]
   (:app.components.Server/components request))
@@ -38,6 +38,17 @@
                      vec)]
     {:status 200 :body {:rollouts rollouts}}))
 
+(defn get-rollout-by-id [request]
+  (let [components (with-components request)
+        id (-> request :path-params :id)
+        into->wire (partial map adapters.rollout/model->wire)
+        _ (println id)
+        rollout (-> (controllers.rollout/get-rollouts-by-id! id components)
+                    tap
+                    into->wire
+                    vec)]
+    {:status 200 :body {:rollout rollout}}))
+
 (defn make-routes [component-interceptor]
   (route/expand-routes
     #{["/todo" :get get-todo :route-name :list-todo]
@@ -47,6 +58,7 @@
 
       ["/rollout" :post [component-interceptor (body-params/body-params) new-rollout] :route-name :new-rollout]
       ["/rollout" :get [component-interceptor (body-params/body-params) get-rollout] :route-name :get-rollout]
+      ["/rollout/:id" :get [component-interceptor (body-params/body-params) get-rollout-by-id] :route-name :get-rollout-by-id]
       }))
 
 (def service-map
