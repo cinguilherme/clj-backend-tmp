@@ -5,35 +5,32 @@
 
 (def pool-size-5 ["root" "boot" "coat" "tree" "bark"])
 
-(defn sample-word []
-  (-> pool-size-5 shuffle first))
-
-(defn char-in-word? [c word]
+(defn- char-in-word? [c word]
   (clojure.string/includes? word c))
 
-(defn str->vec-char [string]
+(defn- str->vec-char [string]
   (->> string vec (mapv #(str %))))
 
-(defn vec-char->pos-char [coll]
+(defn- vec-char->pos-char [coll]
   (loop [m [] c coll i 0]
     (if (empty? c)
       m
       (recur (conj m {:pos i :char (first c)}) (rest c) (inc i)))))
 
-(defn all-indexes-of [word c]
+(defn- all-indexes-of [word c]
   (loop [index 0 col []]
     (let [pos (clojure.string/index-of word c index)]
       (if (nil? pos)
         col
         (recur (inc pos) (conj col pos))))))
 
-(defn ->index-found [word c pos]
+(defn- ->index-found [word c pos]
   (let [indexes (all-indexes-of word c)]
     {:char    c
      :pos     pos
      :indexes indexes}))
 
-(defn char-check->char-check-rich [char-check]
+(defn- char-check->char-check-rich [char-check]
   (let [pos (:pos char-check)
         indexes (:indexes char-check)]
     (-> char-check
@@ -42,19 +39,19 @@
                                        (filterv #(= pos %))
                                        not-empty?)))))
 
-(defn ->vec-char-check-rich [test word]
+(defn- ->vec-char-check-rich [test word]
   (->> test
        str->vec-char
        vec-char->pos-char
        (mapv #(->index-found word (:char %) (:pos %)))
        (mapv char-check->char-check-rich)))
 
-(defn get-found-in [coll]
+(defn- get-found-in [coll]
   (reduce (fn [acc nex] (if (:found? nex)
                           (conj acc (:char nex))
                           acc)) [] coll))
 
-(defn get-correct-places [coll]
+(defn- get-correct-places [coll]
   (reduce (fn [acc nex] (if (:correct-position? nex)
                           (conj acc (:char nex))
                           (conj acc "_"))) [] coll))
@@ -68,18 +65,9 @@
      :found-in            found-in
      :found-correct-place correct-places}))
 
-(defn char-check->report [coll]
-  {:match?              false
-   :found-in            []
-   :found-correct-place []})
+(defn sample-word []
+  (-> pool-size-5 shuffle first))
 
-(s/defn check-against :- s/Str
-  [test :- s/Str
-   word :- s/Str]
-  (->vec-char-check-rich test word)
-  {:match?              false
-   :found-in            []
-   :found-correct-place []})
 
 (comment
 
