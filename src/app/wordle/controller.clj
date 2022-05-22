@@ -10,3 +10,6 @@
 (s/defn test-mult-wordle :- [s.wordle/TestResult]
   [{:keys [test words]}]
   (wordle.logic/complete-multiple test words))
+
+(s/defn new-word []
+  (wordle.logic/sample-word))

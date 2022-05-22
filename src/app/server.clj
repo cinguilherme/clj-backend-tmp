@@ -2,6 +2,7 @@
   (:require [io.pedestal.http.route :as route]
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
+            [io.pedestal.interceptor.helpers :as interceptor]
             [app.controllers.rollout :as controllers.rollout]
             [app.wordle.controller :as controllers.wordle]
             [app.adapters.rollout :as adapters.rollout]
@@ -68,6 +69,9 @@
                  mult-parser)]
     {:status 200 :body body}))
 
+(defn new-wordle-handler [_]
+  {:status 200 :body {:word (controllers.wordle/new-word)}})
+
 (defn make-routes [component-interceptor]
   (route/expand-routes
     #{["/todo" :get get-todo :route-name :list-todo]
@@ -75,10 +79,13 @@
       ["/stuff" :get get-stuff :route-name :list-stuff]
       ["/stuffx" :get [component-interceptor get-stuff] :route-name :list-stuffs]
 
+
       ["/rollout" :post [component-interceptor (body-params/body-params) new-rollout] :route-name :new-rollout]
       ["/rollout" :get [component-interceptor (body-params/body-params) get-rollout] :route-name :get-rollout]
       ["/rollout/:id" :get [component-interceptor (body-params/body-params) get-rollout-by-id] :route-name :get-rollout-by-id]
 
+
+      ["/wordle/new" :get [component-interceptor (body-params/body-params) new-wordle-handler] :route-name :wordle-new]
       ["/wordle/test" :post [component-interceptor (body-params/body-params) test-wordle-handler] :route-name :wordle-test]
       ["/wordle/test-mult" :post [component-interceptor (body-params/body-params) test-mult-wordle-handler] :route-name :wordle-test-mult]
       }))
@@ -86,6 +93,8 @@
 (def service-map
   {:env         :dev
    ;::http/routes routes
+   ::http/allow-origins (constantly true)
+   ::http/allowed-origins {:creds true :allowed-origins ["*"]}
    ::http/type  :jetty
    ::http/port  8081
    ::http/join? false})

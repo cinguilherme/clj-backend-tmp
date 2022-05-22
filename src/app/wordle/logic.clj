@@ -40,7 +40,7 @@
                                        (filterv #(= pos %))
                                        not-empty?)))))
 
-(defn- ->vec-char-check-rich [test word]
+(defn- index-found->vec-char-check-rich [test word]
   (->> test
        str->vec-char
        vec-char->pos-char
@@ -59,7 +59,7 @@
 
 (s/defn complete :- s.wordle/TestResult
   [test word]
-  (let [checks (->vec-char-check-rich test word)
+  (let [checks (index-found->vec-char-check-rich test word)
         found-in (-> checks get-found-in)
         correct-places (-> checks get-correct-places)
         match? (= test word)]
@@ -80,7 +80,7 @@
   (def wor "car")
   (def bor "bar")
 
-  (->vec-char-check-rich "car" "bar")
+  (index-found->vec-char-check-rich "car" "bar")
 
   (complete "car" "bar")
   (complete "bar" "bar")
