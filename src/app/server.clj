@@ -3,9 +3,9 @@
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
             [app.controllers.rollout :as controllers.rollout]
-            [app.controllers.wordle :as controllers.wordle]
+            [app.wordle.controller :as controllers.wordle]
             [app.adapters.rollout :as adapters.rollout]
-            [app.adapters.wordle :as adapters.wordle]
+            [app.wordle.adapter :as adapters.wordle]
             [app.utils :as utils :refer [tap]]))
 
 (defn with-components [request]
@@ -53,9 +53,9 @@
 
 (defn test-wordle-handler [{:keys [edn-params] :as request}]
   (let [body (-> edn-params
-                 adapters.wordle/edn-params->test-word
+                 adapters.wordle/edn-params->wire-in
                  controllers.wordle/test-wordle
-                 adapters.wordle/test-check->wire)]
+                 adapters.wordle/test-check->wire-out-result)]
     {:status 200 :body body}))
 
 (defn make-routes [component-interceptor]

@@ -1,5 +1,6 @@
 (ns app.wordle.logic
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s]
+            [app.wordle.schema :as s.wordle]))
 
 (def not-empty? (comp not empty?))
 
@@ -56,7 +57,8 @@
                           (conj acc (:char nex))
                           (conj acc "_"))) [] coll))
 
-(defn complete [test word]
+(s/defn complete :- s.wordle/TestResult
+  [test word]
   (let [checks (->vec-char-check-rich test word)
         found-in (-> checks get-found-in)
         correct-places (-> checks get-correct-places)
