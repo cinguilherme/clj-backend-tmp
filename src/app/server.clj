@@ -93,8 +93,7 @@
 (def service-map
   {:env         :dev
    ;::http/routes routes
-   ::http/allow-origins (constantly true)
-   ::http/allowed-origins {:creds true :allowed-origins ["*"]}
+   ::http/allowed-origins {:creds true :allowed-origins (constantly true)}
    ::http/type  :jetty
    ::http/port  8081
    ::http/join? false})
