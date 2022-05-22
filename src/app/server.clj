@@ -51,11 +51,21 @@
                     vec)]
     {:status 200 :body {:rollout rollout}}))
 
-(defn test-wordle-handler [{:keys [edn-params] :as request}]
+(defn test-wordle-handler [{:keys [edn-params]}]
   (let [body (-> edn-params
                  adapters.wordle/edn-params->wire-in
+                 tap
                  controllers.wordle/test-wordle
+                 tap
                  adapters.wordle/test-check->wire-out-result)]
+    {:status 200 :body body}))
+
+(defn test-mult-wordle-handler [{:keys [edn-params]}]
+  (let [mult-parser (partial mapv #(adapters.wordle/test-check->wire-out-result %))
+        body (-> edn-params
+                 adapters.wordle/edn-params->mult-wire-in
+                 controllers.wordle/test-mult-wordle
+                 mult-parser)]
     {:status 200 :body body}))
 
 (defn make-routes [component-interceptor]
@@ -70,6 +80,7 @@
       ["/rollout/:id" :get [component-interceptor (body-params/body-params) get-rollout-by-id] :route-name :get-rollout-by-id]
 
       ["/wordle/test" :post [component-interceptor (body-params/body-params) test-wordle-handler] :route-name :wordle-test]
+      ["/wordle/test-mult" :post [component-interceptor (body-params/body-params) test-mult-wordle-handler] :route-name :wordle-test-mult]
       }))
 
 (def service-map

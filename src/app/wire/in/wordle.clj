@@ -2,5 +2,9 @@
   (:require [schema.core :as s]))
 
 (s/defschema WordleTestIn
-  {:try  s/Str
+  {:test  s/Str
    :word s/Str})
+
+(s/defschema WordleTestMultIn
+  {:test  s/Str
+   :words [s/Str]})

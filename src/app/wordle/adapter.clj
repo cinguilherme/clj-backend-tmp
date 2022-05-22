@@ -7,7 +7,11 @@
   [{:keys [test word]}]
   {:test test :word word})
 
-(s/defn test-check->wire-out-result :- app.wire.out.wordle/TestResultWire
+(s/defn edn-params->mult-wire-in :- wire.in/WordleTestMultIn
+  [{:keys [test words]}]
+  {:test test :words words})
+
+(s/defn test-check->wire-out-result :- wire.out/TestResultWire
   [{:keys [found-in found-correct-place]} ]
   {:found-in         found-in
    :correct-position found-correct-place})

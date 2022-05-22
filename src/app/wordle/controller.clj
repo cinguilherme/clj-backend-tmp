@@ -6,3 +6,7 @@
 (s/defn test-wordle :- s.wordle/TestResult
   [{:keys [test word]}]
   (wordle.logic/complete test word))
+
+(s/defn test-mult-wordle :- [s.wordle/TestResult]
+  [{:keys [test words]}]
+  (wordle.logic/complete-multiple test words))

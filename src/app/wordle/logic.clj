@@ -67,6 +67,10 @@
      :found-in            found-in
      :found-correct-place correct-places}))
 
+(s/defn complete-multiple :- [s.wordle/TestResult]
+  [test words]
+  (mapv #(complete test %) words))
+
 (defn sample-word []
   (-> pool-size-5 shuffle first))
 
