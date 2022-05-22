@@ -3,7 +3,9 @@
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
             [app.controllers.rollout :as controllers.rollout]
+            [app.controllers.wordle :as controllers.wordle]
             [app.adapters.rollout :as adapters.rollout]
+            [app.adapters.wordle :as adapters.wordle]
             [app.utils :as utils :refer [tap]]))
 
 (defn with-components [request]
@@ -49,6 +51,13 @@
                     vec)]
     {:status 200 :body {:rollout rollout}}))
 
+(defn test-wordle-handler [{:keys [edn-params] :as request}]
+  (let [body (-> edn-params
+                 adapters.wordle/edn-params->test-word
+                 controllers.wordle/test-wordle
+                 adapters.wordle/test-check->wire)]
+    {:status 200 :body body}))
+
 (defn make-routes [component-interceptor]
   (route/expand-routes
     #{["/todo" :get get-todo :route-name :list-todo]
@@ -59,6 +68,8 @@
       ["/rollout" :post [component-interceptor (body-params/body-params) new-rollout] :route-name :new-rollout]
       ["/rollout" :get [component-interceptor (body-params/body-params) get-rollout] :route-name :get-rollout]
       ["/rollout/:id" :get [component-interceptor (body-params/body-params) get-rollout-by-id] :route-name :get-rollout-by-id]
+
+      ["/wordle/test" :post [component-interceptor (body-params/body-params) test-wordle-handler] :route-name :wordle-test]
       }))
 
 (def service-map
