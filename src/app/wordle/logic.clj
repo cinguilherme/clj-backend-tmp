@@ -54,11 +54,19 @@
                           (conj acc (:char nex))
                           acc)) [] coll))
 
-(let [checks (->vec-char-check-rich "car" "bar")
-      found-in (-> checks get-found-in)]
-  {:match?              false
-   :found-in            found-in
-   :found-correct-place []})
+(defn get-correct-places [coll]
+  (reduce (fn [acc nex] (if (:correct-position? nex)
+                          (conj acc (:char nex))
+                          (conj acc "_"))) [] coll))
+
+(defn complete [test word]
+  (let [checks (->vec-char-check-rich test word)
+        found-in (-> checks get-found-in)
+        correct-places (-> checks get-correct-places)
+        match? (= test word)]
+    {:match?              match?
+     :found-in            found-in
+     :found-correct-place correct-places}))
 
 (defn char-check->report [coll]
   {:match?              false
@@ -77,6 +85,11 @@
 
   (def wor "car")
   (def bor "bar")
+
+  (->vec-char-check-rich "car" "bar")
+
+  (complete "car" "bar")
+  (complete "bar" "bar")
 
   (check-against bor wor)
 
