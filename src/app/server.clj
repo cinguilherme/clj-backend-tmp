@@ -1,8 +1,10 @@
 (ns app.server
-  (:require [io.pedestal.http.route :as route]
+  (:require [clojure.data.json :as json]
+            [io.pedestal.http.route :as route]
             [io.pedestal.http :as http]
             [io.pedestal.http.body-params :as body-params]
             [io.pedestal.interceptor.helpers :as interceptor]
+            [io.pedestal.http.content-negotiation :as conneg]
             [app.controllers.rollout :as controllers.rollout]
             [app.wordle.controller :as controllers.wordle]
             [app.adapters.rollout :as adapters.rollout]
@@ -72,6 +74,27 @@
 (defn new-wordle-handler [_]
   {:status 200 :body {:word (controllers.wordle/new-word)}})
 
+(def supported-types ["text/html" "application/edn" "application/json" "text/plain"])
+
+(def content-neg-intc (conneg/negotiate-content supported-types))
+
+(def coerce-body
+  {:name ::coerce-body
+   :leave
+   (fn [context]
+     (let [accepted         (get-in context [:request :accept :field] "text/plain")
+           response         (get context :response)
+           body             (get response :body)
+           coerced-body     (case accepted
+                              "text/html"        body
+                              "text/plain"       body
+                              "application/edn"  (pr-str body)
+                              "application/json" (json/write-str body))
+           updated-response (assoc response
+                              :headers {"Content-Type" accepted}
+                              :body    coerced-body)]
+       (assoc context :response updated-response)))})
+
 (defn make-routes [component-interceptor]
   (route/expand-routes
     #{["/todo" :get get-todo :route-name :list-todo]
@@ -85,7 +108,7 @@
       ["/rollout/:id" :get [component-interceptor (body-params/body-params) get-rollout-by-id] :route-name :get-rollout-by-id]
 
 
-      ["/wordle/new" :get [component-interceptor (body-params/body-params) new-wordle-handler] :route-name :wordle-new]
+      ["/wordle/new" :get [component-interceptor (body-params/body-params) content-neg-intc coerce-body new-wordle-handler] :route-name :wordle-new]
       ["/wordle/test" :post [component-interceptor (body-params/body-params) test-wordle-handler] :route-name :wordle-test]
       ["/wordle/test-mult" :post [component-interceptor (body-params/body-params) test-mult-wordle-handler] :route-name :wordle-test-mult]
       }))
