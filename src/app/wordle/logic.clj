@@ -10,7 +10,7 @@
   (clojure.string/includes? word c))
 
 (defn- str->vec-char [string]
-  (->> string vec (mapv #(str %))))
+  (->> string vec (mapv str)))
 
 (defn- vec-char->pos-char [coll]
   (loop [m [] c coll i 0]
@@ -77,10 +77,14 @@
 
 (comment
 
+  (require '[flow-storm.api :as fs-api])
+
+  (fs-api/local-connect)
+
   (def wor "car")
   (def bor "bar")
 
-  (index-found->vec-char-check-rich "car" "bar")
+  #rtrace (index-found->vec-char-check-rich "car" "bar")
 
   (complete "car" "bar")
   (complete "bar" "bar")

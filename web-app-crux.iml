@@ -25,6 +25,8 @@
     <orderEntry type="library" name="Leiningen: com.fasterxml.jackson.core/jackson-core:2.9.9" level="project" />
     <orderEntry type="library" name="Leiningen: com.fasterxml.jackson.dataformat/jackson-dataformat-cbor:2.9.9" level="project" />
     <orderEntry type="library" name="Leiningen: com.fasterxml.jackson.dataformat/jackson-dataformat-smile:2.9.9" level="project" />
+    <orderEntry type="library" name="Leiningen: com.github.jpmonettas/flow-storm-dbg:2.0.38" level="project" />
+    <orderEntry type="library" name="Leiningen: com.github.jpmonettas/flow-storm-inst:2.0.38" level="project" />
     <orderEntry type="library" name="Leiningen: com.googlecode.json-simple/json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Leiningen: com.stuartsierra/component.repl:1.0.0" level="project" />
     <orderEntry type="library" name="Leiningen: com.stuartsierra/component:1.1.0" level="project" />
@@ -85,8 +87,19 @@
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-util:9.4.44.v20210927" level="project" />
     <orderEntry type="library" name="Leiningen: org.iq80.snappy/snappy:0.4" level="project" />
     <orderEntry type="library" name="Leiningen: org.javassist/javassist:3.18.1-GA" level="project" />
+    <orderEntry type="library" name="Leiningen: org.kordamp.ikonli/ikonli-core:11.5.0" level="project" />
+    <orderEntry type="library" name="Leiningen: org.kordamp.ikonli/ikonli-javafx:11.5.0" level="project" />
+    <orderEntry type="library" name="Leiningen: org.kordamp.ikonli/ikonli-materialdesign-pack:11.5.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.lz4/lz4-java:1.7.1" level="project" />
     <orderEntry type="library" name="Leiningen: org.msgpack/msgpack:0.6.12" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-base:18" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-base:18:mac-aarch64" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-controls:18" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-controls:18:mac-aarch64" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-graphics:18" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-graphics:18:mac-aarch64" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-swing:18" level="project" />
+    <orderEntry type="library" name="Leiningen: org.openjfx/javafx-swing:18:mac-aarch64" level="project" />
     <orderEntry type="library" name="Leiningen: org.ow2.asm/asm:9.2" level="project" />
     <orderEntry type="library" name="Leiningen: org.slf4j/slf4j-api:1.7.30" level="project" />
     <orderEntry type="library" name="Leiningen: org.tukaani/xz:1.8" level="project" />

@@ -14,5 +14,7 @@
                  [io.pedestal/pedestal.interceptor   "0.5.10"]
                  [io.pedestal/pedestal.jetty         "0.5.10"]]
   :profiles {:dev {:dependencies [[org.clojure/tools.namespace "1.2.0"]
-                                  [com.stuartsierra/component.repl "1.0.0"]]
+                                  [com.stuartsierra/component.repl "1.0.0"]
+                                  [com.github.jpmonettas/flow-storm-dbg "2.0.38"]
+                                  [com.github.jpmonettas/flow-storm-inst "2.0.38"]]
                    :source-paths ["dev"]}})
