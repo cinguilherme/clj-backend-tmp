@@ -1,13 +1,24 @@
 (ns app.web-app-crux
   (:require [crux.api :as crux]
             [app.components.CruxDb :as CruxDb]
-            [com.stuartsierra.component :as component]))
+            [monger.core :as mg]
+            [monger.collection :as mc]
+            [com.stuartsierra.component :as component])
+  (:import [com.mongodb MongoOptions ServerAddress WriteConcern]
+           (org.bson.types ObjectId)))
 
 (def node (crux/start-node {}))
 
 (def nodex (component/start (CruxDb/new-db)))
 
 (:db-node nodex)
+
+(def mongo-uri (System/getenv "MONGO_ATLAS_URI"))
+
+(let [{:keys [conn db]} (mg/connect-via-uri mongo-uri)]
+  (do
+    (mc/insert db "documents" {:_id (ObjectId.) :name "gui" :age 35})
+    (mg/disconnect conn)))
 
 (comment
 

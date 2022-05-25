@@ -6,7 +6,14 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.json "2.4.0"]
                  [com.stuartsierra/component "1.1.0"]
+
+                 [environ "0.5.0"]
+
+                 ;; start DBs
                  [pro.juxt.crux/crux-core "1.18.1"]
+                 [com.novemberain/monger "3.5.0"]
+                 ;; END DBs
+
                  [org.clojure/core.async "1.5.648"]
                  [prismatic/schema "1.2.1"]
                  [io.pedestal/pedestal.service       "0.5.10"]
