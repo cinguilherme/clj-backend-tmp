@@ -3,16 +3,22 @@
             [app.components.CruxDb :as CruxDb]
             [monger.core :as mg]
             [monger.collection :as mc]
-            [com.stuartsierra.component :as component])
+            [com.stuartsierra.component :as component]
+            [datomic.client.api :as d]
+            [datomic.api :as dt-p]
+            )
   (:import [com.mongodb MongoOptions ServerAddress WriteConcern]
            (org.bson.types ObjectId)))
 
+;;crux
 (def node (crux/start-node {}))
 
 (def nodex (component/start (CruxDb/new-db)))
 
 (:db-node nodex)
+;;end crux
 
+;;mongo
 (def mongo-uri (System/getenv "MONGO_ATLAS_URI"))
 
 (let [{:keys [conn db]} (mg/connect-via-uri mongo-uri)]
@@ -24,6 +30,29 @@
   (do
     (println (mc/find-maps db "documents"))
     (mg/disconnect conn)))
+
+;;end mongo
+
+
+;;datomic
+(def datomic-str "datomic:dev://localhost:4334/hello")
+
+(def db-uri "datomic:mem://hello")
+
+(dt-p/create-database db-uri)
+(def conn (dt-p/connect db-uri))
+(println conn)
+
+@(dt-p/transact conn [{:db/doc "hello doc"}])
+
+;; movies
+
+(def client (d/client
+             {:server-type :dev-local
+              :system      "dev-local"}))
+
+
+;;end datomic
 
 (comment
 

@@ -9,6 +9,11 @@
 
                  [environ "0.5.0"]
 
+                 ;;datomic
+                 [com.datomic/client-pro "1.0.75"]
+                 ;; in collection under :dependencies key
+                 [com.datomic/datomic-pro "1.0.6397"]
+
                  ;; start DBs
                  [pro.juxt.crux/crux-core "1.18.1"]
                  [com.novemberain/monger "3.5.0"]
