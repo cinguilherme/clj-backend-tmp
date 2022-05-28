@@ -75,7 +75,7 @@
   (-> pool-size-5 shuffle first))
 
 
-(comment
+#_(comment
 
   (require '[flow-storm.api :as fs-api])
 
@@ -84,7 +84,7 @@
   (def wor "car")
   (def bor "bar")
 
-  #rtrace (index-found->vec-char-check-rich "car" "bar")
+  ;;#rtrace (index-found->vec-char-check-rich "car" "bar")
 
   (complete "car" "bar")
   (complete "bar" "bar")

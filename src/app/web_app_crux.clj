@@ -20,6 +20,11 @@
     (mc/insert db "documents" {:_id (ObjectId.) :name "gui" :age 35})
     (mg/disconnect conn)))
 
+(let [{:keys [conn db]} (mg/connect-via-uri mongo-uri)]
+  (do
+    (println (mc/find-maps db "documents"))
+    (mg/disconnect conn)))
+
 (comment
 
   (def thing {:crux.db/id 1

@@ -11,18 +11,18 @@
    :enter (fn [context]
             (update context :request assoc ::components components))})
 
-(defn rich-routes [db-crux config cache routes-maker]
-  (-> {:db db-crux :cache cache :config config}
+(defn rich-routes [db-crux config mongo cache routes-maker]
+  (-> {:db db-crux :cache cache :config config :mongo mongo}
       make-components
       routes-maker))
 
-(defrecord Pedestal [db-crux config cache service-map routes-maker service]
+(defrecord Pedestal [db-crux config cache mongo service-map routes-maker service]
   component/Lifecycle
 
   (start [this]
     (if service
       this
-      (let [routes (rich-routes db-crux config cache routes-maker)
+      (let [routes (rich-routes db-crux config mongo cache routes-maker)
             service-map-with-routes (assoc service-map ::http/routes routes)]
 
         (cond-> service-map-with-routes

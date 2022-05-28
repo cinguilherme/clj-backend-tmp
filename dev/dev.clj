@@ -22,6 +22,7 @@
     [com.stuartsierra.component.repl :refer [reset set-init start stop system]]
     [app.web-app-crux]
     [app.components.CruxDb :as CruxDb]
+    [app.components.MongoDB :as MongoDb]
     [app.components.MemoryCache :as MemoryCache]
     [app.components.Cli :as Cli]
     [app.components.Server :as Server]
@@ -30,6 +31,8 @@
 
 ;; Do not try to load source code from 'resources' directory
 (clojure.tools.namespace.repl/set-refresh-dirs "dev" "src" "test")
+
+(def mongo-uri (System/getenv "MONGO_ATLAS_URI"))
 
 (defn dev-system
   "Constructs a system map suitable for interactive development."
@@ -44,6 +47,11 @@
 
     :cache
     (MemoryCache/new-cache)
+
+    :mongo
+    (component/using
+      (MongoDb/new-mongodb mongo-uri)
+      {:config :config})
 
     :service-map
     app.server/service-map
@@ -63,7 +71,8 @@
        :routes-maker :routes-maker
        :db-crux      :db-crux
        :cache        :cache
-       :config       :config})))
+       :config       :config
+       :mongo        :mongo})))
 
 (set-init (fn [_] (dev-system)))
 
