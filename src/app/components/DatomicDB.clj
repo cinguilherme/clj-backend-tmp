@@ -1,0 +1,19 @@
+(ns app.components.DatomicDB
+  (:require [com.stuartsierra.component :as component]
+            [datomic.api :as d]))
+
+
+(defrecord DatomicDB [datomic-uri config]
+  component/Lifecycle
+
+  (start [this]
+    (let [{:keys [conn db]} (d/connect datomic-uri)]
+      (assoc this :datomic {:conn conn :db db})))
+
+  (stop [this]
+    (let [conn (-> this :datomic :conn)
+          _ (d/shutdown conn)])
+    (dissoc this :datomic)))
+
+(defn new-datomicdb [uri]
+  (map->DatomicDB {:datomic-uri uri}))

@@ -23,6 +23,7 @@
     [app.web-app-crux]
     [app.components.CruxDb :as CruxDb]
     [app.components.MongoDB :as MongoDb]
+    [app.components.DatomicDB :as DatomicDB]
     [app.components.MemoryCache :as MemoryCache]
     [app.components.Cli :as Cli]
     [app.components.Server :as Server]
@@ -33,6 +34,8 @@
 (clojure.tools.namespace.repl/set-refresh-dirs "dev" "src" "test")
 
 (def mongo-uri (System/getenv "MONGO_ATLAS_URI"))
+
+(def datomic-uri "datomic:mem://hello")
 
 (defn dev-system
   "Constructs a system map suitable for interactive development."
@@ -47,6 +50,11 @@
 
     :cache
     (MemoryCache/new-cache)
+
+    :datomic
+    (component/using
+      (DatomicDB/new-datomicdb datomic-uri)
+      {:config :config})
 
     :mongo
     (component/using
@@ -70,6 +78,7 @@
       {:service-map  :service-map
        :routes-maker :routes-maker
        :db-crux      :db-crux
+       :datomic      :datomic
        :cache        :cache
        :config       :config
        :mongo        :mongo})))

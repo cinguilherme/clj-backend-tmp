@@ -4,11 +4,8 @@
             [monger.core :as mg]
             [monger.collection :as mc]
             [com.stuartsierra.component :as component]
-            [datomic.client.api :as d]
-            [datomic.api :as dt-p]
-            )
-  (:import [com.mongodb MongoOptions ServerAddress WriteConcern]
-           (org.bson.types ObjectId)))
+            [datomic.api :as d])
+  (:import (org.bson.types ObjectId)))
 
 ;;crux
 (def node (crux/start-node {}))
@@ -39,17 +36,14 @@
 
 (def db-uri "datomic:mem://hello")
 
-(dt-p/create-database db-uri)
-(def conn (dt-p/connect db-uri))
+(d/create-database db-uri)
+(def conn (d/connect db-uri))
 (println conn)
 
-@(dt-p/transact conn [{:db/doc "hello doc"}])
+@(d/transact conn [{:db/doc "hello doc"}])
 
 ;; movies
 
-(def client (d/client
-             {:server-type :dev-local
-              :system      "dev-local"}))
 
 
 ;;end datomic

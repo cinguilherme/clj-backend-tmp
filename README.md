@@ -14,7 +14,11 @@ Also using the already super popular Pedestal way of building an web app with Je
 Architecture style aligned with the Hexagonal Architecture with a little sprincles of personal bias.
 
 
-There is a docker-compose file here with most of the dependecies ready to roll, except for Datomic. This one you have to figure out. [Datomic Dev](https://docs.datomic.com/on-prem/getting-started/dev-setup.html)
+There is a docker-compose file here with most of the dependecies ready to roll, except for Datomic. 
+This one you have to figure out. [Datomic Dev](https://docs.datomic.com/on-prem/getting-started/dev-setup.html)
+
+quick setup for datomic after download the local-dev-server 
+run `bin/maven-install` so that the datomic.api can be available since it's not public.
 
 ## Releases and Dependency Information
 
