@@ -2,14 +2,16 @@ version: "3.7"
 
 services:
 
-      crux:
-            image: juxt/xtdb-in-memory:1.21.0
-            ports:
-                  - "3000:3000"
+      #crux:
+      #      image: juxt/xtdb-in-memory:1.21.0
+      #      ports:
+      #            - "3000:3000"
 
       zookeeper:
             image: confluentinc/cp-zookeeper:7.0.1
             container_name: zookeeper
+            ports:
+                  - "2181:2181"
             environment:
                   ZOOKEEPER_CLIENT_PORT: 2181
                   ZOOKEEPER_TICK_TIME: 2000
@@ -19,6 +21,7 @@ services:
             container_name: broker
             ports:
                   - "9092:9092"
+                  - "29092:29092"
             depends_on:
                   - zookeeper
             environment:
@@ -30,51 +33,52 @@ services:
                   KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
                   KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
-      mongodb:
-            image: mongo:4.2.8
-            restart: always
-            volumes:
-                  - ./var/lib/mongodb:/data/db/mongodb
-            ports:
-                  - "27017:27017"
-            environment:
-                  - MONGO_INITDB_ROOT_USERNAME=admin
-                  - MONGO_INITDB_ROOT_PASSWORD=admin
-                  - MONGO_INITDB_DATABASE=crux
-                  - MONGO_INITDB_USER=crux
-                  - MONGO_INITDB_PASSWORD=crux
+      #mongodb:
+      #      image: mongo:4.2.8
+      #      restart: always
+      #      volumes:
+      #            - ./var/lib/mongodb:/data/db/mongodb
+      #      ports:
+      #            - "27017:27017"
+      #      environment:
+      #            - MONGO_INITDB_ROOT_USERNAME=admin
+      #            - MONGO_INITDB_ROOT_PASSWORD=admin
+      #            - MONGO_INITDB_DATABASE=crux
+      #            - MONGO_INITDB_USER=crux
+      #            - MONGO_INITDB_PASSWORD=crux
 
-      postgresdb:
-            image: postgres:9.6
-            ports:
-                  - "5432:5432"
-            volumes:
-                  - ./var/lib/postgresql/data:/var/lib/postgresql/data
-
-      rabbitmq:
-            image: rabbitmq:3-management
-            ports:
-                  - "5672:5672"
-                  - "15672:15672"
-            volumes:
-                  - ./var/lib/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia
-                  - ./var/log/rabbitmq:/var/log/rabbitmq
-
-      redis:
-            image: redis
-            volumes:
-                  - ./redis-data:/data
-            ports:
-                  - 6379:6379
-
-      local-stack:
-            image: localstack/localstack:latest
-            environment:
-                  - AWS_DEFAULT_REGION=us-east-1
-                  - EDGE_PORT=4566
-                  - SERVICES=lambda,s3,sqs,sns,dynamodb
-            ports:
-                  - '4566-4583:4566-4583'
-            volumes:
-                  - "${TEMPDIR:-/tmp/localstack}:/tmp/localstack"
-                  - "/var/run/docker.sock:/var/run/docker.sock"
+      #postgresdb:
+      #      image: postgres:9.6
+      #      ports:
+      #            - "5432:5432"
+      #      volumes:
+      #            - ./var/lib/postgresql/data:/var/lib/postgresql/data
+#
+      #rabbitmq:
+      #      image: rabbitmq:3-management
+      #      ports:
+      #            - "5672:5672"
+      #            - "15672:15672"
+      #      volumes:
+      #            - ./var/lib/rabbitmq/mnesia:/var/lib/rabbitmq/mnesia
+      #            - ./var/log/rabbitmq:/var/log/rabbitmq
+#
+      #redis:
+      #      image: redis
+      #      volumes:
+      #            - ./redis-data:/data
+      #      ports:
+      #            - 6379:6379
+#
+      #local-stack:
+      #      image: localstack/localstack:latest
+      #      environment:
+      #            - AWS_DEFAULT_REGION=us-east-1
+      #            - EDGE_PORT=4566
+      #            - SERVICES=lambda,s3,sqs,sns,dynamodb
+      #      ports:
+      #            - '4566-4583:4566-4583'
+      #      volumes:
+      #            - "${TEMPDIR:-/tmp/localstack}:/tmp/localstack"
+      #            - "/var/run/docker.sock:/var/run/docker.sock"
+#

@@ -9,6 +9,9 @@
 
                  [environ "0.5.0"]
 
+                 ;;kafka
+                 [fundingcircle/jackdaw "0.6.0"]
+
                  ;;datomic
                  [com.datomic/client-pro "1.0.75"]
                  ;; in collection under :dependencies key
