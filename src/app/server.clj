@@ -87,6 +87,13 @@
         docs (tap (mc/insert (-> mongo :mongo :db) "documents" doc))]
     {:status 200 :body docs}))
 
+;; function get all documents with name = "gui"
+(defn mongo-get-docs-by-name [request]
+  (let [{:keys [mongo]} (-> request with-components)
+        docs (vec (mc/find-maps (-> mongo :mongo :db) "documents"
+                                 {:name "gui"}))]
+    {:status 200 :body docs}))
+
 
 (def supported-types ["text/html" "application/edn" "application/json" "text/plain"])
 
