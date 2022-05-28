@@ -101,9 +101,9 @@
   ([topic-config polling-interval-ms]
    (let [client-config (assoc consumer-config
                          "group.id"
-                         "0b1063dc-bafe-4a4c-b766-ff511d3264d4")]
+                         (str "5f72dcac-120c-488c-89c0-011b7109fd32"))]
      (with-open [client (tap (jc/subscribed-consumer client-config [topic-config]))]
-       (doall (jcl/log client 1000 seq))))))
+       (doall (jcl/log client polling-interval-ms seq))))))
 
 (defn get-keyvals
   "Takes a topic config, consumes from a Kafka topic, and returns a

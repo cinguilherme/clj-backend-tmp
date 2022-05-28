@@ -2,7 +2,7 @@
   :description "TODO"
   :url "TODO"
   :license {:name "TODO: Choose a license"
-            :url "http://choosealicense.com/"}
+            :url  "http://choosealicense.com/"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/data.json "2.4.0"]
                  [com.stuartsierra/component "1.1.0"]
@@ -11,6 +11,13 @@
 
                  ;;kafka
                  [fundingcircle/jackdaw "0.6.0"]
+
+                 [clj-kafka.franzy/core "2.0.7"]
+                 [clj-kafka.franzy/admin "2.0.7"]
+                 [clj-kafka.franzy/common "2.0.7"]
+
+                 [dvlopt/kafka "1.3.1"]
+
 
                  ;;datomic
                  [com.datomic/client-pro "1.0.75"]
@@ -24,10 +31,10 @@
 
                  [org.clojure/core.async "1.5.648"]
                  [prismatic/schema "1.2.1"]
-                 [io.pedestal/pedestal.service       "0.5.10"]
-                 [io.pedestal/pedestal.route         "0.5.10"]
-                 [io.pedestal/pedestal.interceptor   "0.5.10"]
-                 [io.pedestal/pedestal.jetty         "0.5.10"]]
+                 [io.pedestal/pedestal.service "0.5.10"]
+                 [io.pedestal/pedestal.route "0.5.10"]
+                 [io.pedestal/pedestal.interceptor "0.5.10"]
+                 [io.pedestal/pedestal.jetty "0.5.10"]]
   :profiles {:dev {:dependencies [[org.clojure/tools.namespace "1.2.0"]
                                   [com.stuartsierra/component.repl "1.0.0"]
                                   [com.github.jpmonettas/flow-storm-dbg "2.0.38"]
