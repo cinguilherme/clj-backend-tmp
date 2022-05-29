@@ -7,6 +7,8 @@
                  [org.clojure/data.json "2.4.0"]
                  [com.stuartsierra/component "1.1.0"]
 
+                 [clj-time "0.15.2"]
+
                  [environ "0.5.0"]
 
                  ;;kafka

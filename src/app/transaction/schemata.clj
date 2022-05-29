@@ -3,7 +3,8 @@
 
 (s/defschema Transaction
   {:id     s/Uuid
-   :amount s/Num})
+   :amount s/Num
+   :timestamp s/Inst})
 
 (s/defschema Account
   {:id s/Uuid
