@@ -1,6 +1,6 @@
 (ns app.controllers.rollout
   (:require [schema.core :as s]
-            [app.db.rollout :as db.rollout]
+            [app.db.crux.rollout :as db.rollout]
             [app.utils :as utils :refer [tap]]))
 
 (s/defn new-rollout!

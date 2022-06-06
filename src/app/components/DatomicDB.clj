@@ -8,8 +8,12 @@
 
   (start [this]
     (println datomic-uri)
-    (let [conn (d/connect datomic-uri)]
-      (assoc this :datomic {:conn conn})))
+    (try (let [conn (d/connect datomic-uri)]
+           (assoc this :datomic {:conn conn}))
+      (catch Throwable t
+        (println "DatomicDB: Failed to connect to datomic-uri")
+        (println t)
+        this)))
 
   (stop [this]
     (let [conn (-> this :datomic :conn)

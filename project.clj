@@ -21,6 +21,9 @@
                  [dvlopt/kafka "1.3.1"]
 
 
+                 ;; my own disney stuff
+                 [org.clojars.cinguilherme/image-x "0.1.1"]
+
                  ;;datomic
                  [com.datomic/client-pro "1.0.75"]
                  ;; in collection under :dependencies key

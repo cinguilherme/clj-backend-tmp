@@ -11,6 +11,7 @@
             [app.mongo-doc.adapter :as mongo-doc.adapter]
             [app.wordle.adapter :as adapters.wordle]
             [app.utils :as utils :refer [tap]]
+            [image-x.core :as image-x]
             [monger.core :as mg]
             [monger.collection :as mc]))
 
@@ -101,6 +102,11 @@
 
     {:status 200 :body []}))
 
+;;img download
+(defn image-download-handler [{:keys [edn-params] :as request}]
+  (let [rx (-> edn-params -> :uris image-x.core/uri-list->zip-images)]
+    {:status 200 :body rx}))
+
 (def supported-types ["text/html" "application/edn" "application/json" "text/plain"])
 
 (def content-neg-intc (conneg/negotiate-content supported-types))
@@ -139,10 +145,19 @@
       ["/wordle/test" :post [component-interceptor (body-params/body-params) test-wordle-handler] :route-name :wordle-test]
       ["/wordle/test-mult" :post [component-interceptor (body-params/body-params) test-mult-wordle-handler] :route-name :wordle-test-mult]
 
-      ["/mongo/docs" :get [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-get-docs] :route-name :mongo-docs]
-      ["/mongo/docs" :post [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-new-docs] :route-name :mongo-new-doc]
+      ["/mongo/docs" :get
+       [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-get-docs] :route-name :mongo-docs]
 
-      ["/datomic/sample" :get [component-interceptor (body-params/body-params) content-neg-intc coerce-body datomic-get-sample] :route-name :datomic-sample]
+      ["/mongo/docs" :post
+       [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-new-docs] :route-name :mongo-new-doc]
+
+      ["/datomic/sample" :get
+       [component-interceptor (body-params/body-params) content-neg-intc coerce-body datomic-get-sample]
+       :route-name :datomic-sample]
+
+      ["/images/download-list" :post
+       [component-interceptor (body-params/body-params) content-neg-intc coerce-body image-download-handler]
+       :route-name :image-download]
 
       }))
 

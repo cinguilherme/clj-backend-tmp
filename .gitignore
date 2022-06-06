@@ -16,3 +16,6 @@ pom.xml.asc
 .env
 /var
 /redis-data
+.DS_Store
+zip-images.zip
+zip-images
