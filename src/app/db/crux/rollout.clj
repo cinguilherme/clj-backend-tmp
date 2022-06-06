@@ -1,4 +1,4 @@
-(ns app.db.rollout
+(ns app.db.crux.rollout
   (:require [schema.core :as s]
             [crux.api :as crux]
             [app.models.rollout :as models.rollout]))

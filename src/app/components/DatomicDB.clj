@@ -7,8 +7,9 @@
   component/Lifecycle
 
   (start [this]
-    (let [{:keys [conn db]} (d/connect datomic-uri)]
-      (assoc this :datomic {:conn conn :db db})))
+    (println datomic-uri)
+    (let [conn (d/connect datomic-uri)]
+      (assoc this :datomic {:conn conn})))
 
   (stop [this]
     (let [conn (-> this :datomic :conn)

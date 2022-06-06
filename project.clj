@@ -24,7 +24,7 @@
                  ;;datomic
                  [com.datomic/client-pro "1.0.75"]
                  ;; in collection under :dependencies key
-                 [com.datomic/datomic-pro "1.0.6397"]
+                 [com.datomic/datomic-pro "1.0.6269"]
 
                  ;; start DBs
                  [pro.juxt.crux/crux-core "1.18.1"]

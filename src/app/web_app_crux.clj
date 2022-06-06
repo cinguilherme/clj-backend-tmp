@@ -8,7 +8,8 @@
             [jackdaw.serdes.edn :as jse]
             [jackdaw.client :as jc]
             [jackdaw.client.log :as jcl]
-            [datomic.api :as d])
+            [datomic.api :as d]
+            [datomic.client.api :as q])
   (:import (org.bson.types ObjectId))
   )
 
@@ -45,7 +46,13 @@
 (def conn (d/connect db-uri))
 (println conn)
 
-@(d/transact conn [{:db/doc "hello doc"}])
+@(d/transact conn [{:db/doc "hello doc Hermanation"}])
+(def db (d/db conn))
+(d/q '{:find  [(pull ?bla [*])]
+       :in    [$]
+       :where [[?bla :db/doc ?x]
+               [(clojure.string/includes? ?x "Hermanation")]]
+       } db)
 
 ;; movies
 ;;end datomic

@@ -83,7 +83,7 @@
 
 (defn mongo-new-docs [{:keys [edn-params] :as request}]
   (let [{:keys [mongo]} (-> request with-components)
-        doc (tap (-> edn-params -> mongo-doc.adapter/wire-in->new-doc))
+        doc (tap (-> edn-params mongo-doc.adapter/wire-in->new-doc))
         docs (tap (mc/insert (-> mongo :mongo :db) "documents" doc))]
     {:status 200 :body docs}))
 
@@ -94,6 +94,12 @@
                                  {:name "gui"}))]
     {:status 200 :body docs}))
 
+;; datomic handlers
+(defn datomic-get-sample [request]
+  (let [{:keys [datomic]} (-> request with-components)]
+    (tap (:datomic datomic))
+
+    {:status 200 :body []}))
 
 (def supported-types ["text/html" "application/edn" "application/json" "text/plain"])
 
@@ -135,6 +141,9 @@
 
       ["/mongo/docs" :get [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-get-docs] :route-name :mongo-docs]
       ["/mongo/docs" :post [component-interceptor (body-params/body-params) content-neg-intc coerce-body mongo-new-docs] :route-name :mongo-new-doc]
+
+      ["/datomic/sample" :get [component-interceptor (body-params/body-params) content-neg-intc coerce-body datomic-get-sample] :route-name :datomic-sample]
+
       }))
 
 (def service-map

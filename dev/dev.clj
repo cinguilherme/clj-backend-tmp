@@ -35,7 +35,7 @@
 
 (def mongo-uri (System/getenv "MONGO_ATLAS_URI"))
 
-(def datomic-uri "datomic:mem://hello")
+(def datomic-uri (str "datomic:mem://hello"))
 
 (defn dev-system
   "Constructs a system map suitable for interactive development."

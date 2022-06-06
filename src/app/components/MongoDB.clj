@@ -6,11 +6,13 @@
   component/Lifecycle
 
   (start [this]
-    (let [{:keys [conn db]} (mg/connect-via-uri mongo-uri)]
+    this
+    #_(let [{:keys [conn db]} (mg/connect-via-uri mongo-uri)]
       (assoc this :mongo {:conn conn :db db})))
 
   (stop [this]
-    (let [conn (-> this :mongo :conn)
+    this
+    #_(let [conn (-> this :mongo :conn)
           _ (mg/disconnect conn)])
     (dissoc this :mongo)))
 

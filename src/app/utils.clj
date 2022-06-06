@@ -1,4 +1,5 @@
 (ns app.utils
+  (:require [clojure.string :as string]) 
   (:import (java.util Date)))
 
 (defn tap [v] (do (println v) v))
@@ -8,11 +9,10 @@
 (defn now []
   (new Date))
 
+
 (comment
 
   (now)
 
   (not-nil? nil)
-  (not-nil? true)
-
-  )
+  (not-nil? true))
