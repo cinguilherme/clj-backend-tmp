@@ -104,8 +104,8 @@
 
 ;;img download
 (defn image-download-handler [{:keys [edn-params] :as request}]
-  (let [rx (-> edn-params -> :uris image-x.core/uri-list->zip-images)]
-    {:status 200 :body rx}))
+  (let [_ (-> edn-params :uris tap image-x.core/uri-list->zip-images)]
+    {:status 202 :body {:msg "image download accepted"}}))
 
 (def supported-types ["text/html" "application/edn" "application/json" "text/plain"])
 
